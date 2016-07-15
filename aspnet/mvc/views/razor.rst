@@ -28,7 +28,7 @@ Is rendered ``<p>Hello World</p>`` by the server.
 Rendering server code
 ----------------------
 
-Razor supports C# and uses the ``@`` symbol to transistion from HTML to C#. 
+Razor supports C# and uses the ``@`` symbol to transition from HTML to C#. 
 Razor can transition from HTML into C# or into Razor specific markup. When an ``@`` symbol is followed by a Razor [reserved keyword](TODO, LINK DOWN) it transitions into Razor specific markup, otherwise it transitions into plain C# . 
 
 Razor expressions
@@ -59,7 +59,7 @@ Which is rendered by a browser as:
 .. image:: razor/_static/r1.png
   :scale: 100
 
-Explict expressesion generally cannot contain spaces. For example:
+Explicit expressions generally cannot contain spaces. For example:
 
 .. literalinclude:: razor/sample/Views/Home/Contact.cshtml
   :language: html
@@ -91,7 +91,7 @@ Which renders the following HTML:
 
 .. review comment: I removed "unless dictated by the calling of a method". How is that dictated? Need to explain that if we want to add it back.
 
-With the exception of the C# ``await`` keyword implicit expressions must not contain spaces. For example you can intermingle spaces as long as the C# statement has a clear ending:
+With the exception of the C# ``await`` keyword implicit expressions must not contain spaces. For example, you can intermingle spaces as long as the C# statement has a clear ending:
 
 <p>@await DoSomething("hello", "world")</p>
 
@@ -128,7 +128,7 @@ Consider the following Razor markup:
   
   <p>Age @joe.Age</p>
 
-Predictibly, the server renders ``<p>Age 33</p>``. But suppose you needed to concatinate the output to get ``Age33`` with no space between "Age" and "33". The following markup:
+Predictably, the server renders ``<p>Age 33</p>``. But suppose you needed to concatenate the output to get ``Age33`` with no space between "Age" and "33". The following markup:
 
 .. code-block:: none
 
@@ -144,7 +144,7 @@ generates:
 
   <p>Age@joe.Age</p>
 
-Razor is treating ``Age@joe.Age`` as an email alias. In case like this, create an explicit expression with ``()``:
+Razor is treating ``Age@joe.Age`` as an email alias. In cases like this, create an explicit expression with ``()``:
 
 .. code-block:: none
 
@@ -265,7 +265,7 @@ Consider the following Razor markup which renders a list of names:
       <p>Name: @person.Name</p>
   }
 
-The HTML tag ``<p> </p>`` provides a boundry for Razor to transistion into C#. But suppose you wanted to render the names **without** HTML tags? The following code generates a Razor compilation error:
+The HTML tag ``<p> </p>`` provides a boundry for Razor to transition into C#. But suppose you wanted to render the names **without** HTML tags? The following code generates a Razor compilation error:
 
 .. code-block:: none
 
@@ -681,8 +681,24 @@ The generated Razor C# looks like:
   :language: c#
   :lines: 1-19
 
-@section
-The @section directive should be used in conjunction with an [layout page](LINK TO LAYOUT TUTORIAL) to enable views to render content in different parts of a final HTML page. Its syntax is @section <SectionName> { <Razor Code> }. For example:
+``@section``
+^^^^^^^^^^^^^^
+
+The ``@section`` directive is used in conjunction with the :doc:`layout page </mvc/views/layout>` to enable views to render content in different parts of the rendered HTML page. The syntax is:
+
+.. code-block:: none
+
+  @section SectionName { Razor Code }
+  
+For example:
+
+.. code-block:: none
+  
+  @section Scripts {
+      <script src="~/js/site.js"></script>
+  }
+
+
 
 TagHelpers
 -----------
@@ -717,9 +733,10 @@ The browser rendering of the above Razor markup:
 .. image:: razor/_static/r2.png
   :scale: 100  
   
+.. _Razor-reserved-keywords-label:  
   
-  
-  
+Razor reserved keywords
+-------------------------
   
 .. _Razor-CustomCompilationService-label:
 

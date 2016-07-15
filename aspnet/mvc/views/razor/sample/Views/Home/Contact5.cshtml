@@ -1,8 +1,39 @@
-﻿@functions {
-    public string GetHello()
-    {
-        return "Hello";
-    }
+﻿@{
+    // Razor Keywords
+    var @functions = "functions";
+    var @inherits = "inherits";
+    var @model = "model";
+    var @section = "section";
+    var @helper = "helper";  // Not supported in ASP.NET Core.
+
+
+    var @case = "case";
+    var @do = "do";
+    var @default = "default";
+    var @for = "for";
+    var @foreach = "foreach";
+    var @if = "if";
+    var @lock = "lock";
+    var @switch = "switch";
+    var @try = "try";
+    var @using = "using";
+    var @while = "while";
 }
 
-<div>From method: @GetHello()</div>
+<div>@(functions)</div>
+<div>@(inherits)</div>
+<div>@(model)</div>
+<div>@(section)</div>
+<div>@(helper)</div>
+
+<div>@(@case)</div>
+<div>@(@do)</div>
+<div>@(@default)</div>
+<div>@(@for)</div>
+<div>@(@foreach)</div>
+<div>@(@if)</div>
+<div>@(@lock)</div>
+<div>@(@switch)</div>
+<div>@(@try)</div>
+<div>@(@using)</div>
+<div>@(@while)</div>
