@@ -1,11 +1,14 @@
 ﻿@{
-    // Razor Keywords
+    // Razor keywords.
+
     var @functions = "functions";
     var @inherits = "inherits";
     var @model = "model";
     var @section = "section";
-    var @helper = "helper";  // Not supported in ASP.NET Core.
-    
+    var @helper = "helper";         // Not supported by ASP.NET Core.
+
+    // C# Razor keywords.
+
     var @case = "case";
     var @do = "do";
     var @default = "default";
@@ -17,14 +20,22 @@
     var @try = "try";
     var @using = "using";
     var @while = "while";
+
+    // Reserved keywords not used.
+
+    var @namespace = "namespace";
+    var @class = "class";
+    var @layout = "layout";
 }
 
+<p>Razor keywords.</p>
 <div>@(functions)</div>
 <div>@(inherits)</div>
 <div>@(model)</div>
 <div>@(section)</div>
 <div>@(helper)</div>
 
+<p>C# Razor keywords.</p>
 <div>@(@case)</div>
 <div>@(@do)</div>
 <div>@(@default)</div>
@@ -36,3 +47,8 @@
 <div>@(@try)</div>
 <div>@(@using)</div>
 <div>@(@while)</div>
+
+<p>Reserved keywords not used</p>
+<div>@(@namespace)</div>
+<div>@(@class)</div>
+<div>@(@layout)</div>

@@ -2,5 +2,5 @@
 
 public abstract class CustomRazorPage<TModel> : RazorPage<TModel>
 {
-    public string CustomText { get; } = "Hello World";
+    public string CustomText { get; } = "Hello World.";
 }

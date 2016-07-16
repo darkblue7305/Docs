@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace RazorSample.Classes
+// Doesn't work without <TModel>
+public abstract class CustomRazorPage2 : RazorPage
 {
-    public abstract class CustomRazorPage<TModel> : RazorPage<TModel>
-    {
-        public string CustomText { get; } = "Hello model and custom.";
-    }
-
+    public string CustomText { get; } = "CustomRazorPage2.";
 }

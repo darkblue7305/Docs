@@ -31,6 +31,12 @@
 
 <br /><br />
 
+@for (var i = 0; i < people.Length; i++)
+{
+    var person = people[i];
+    <div>Name: @person.Name</div>
+}
+
   @for (var i = 0; i < people.Length; i++)
   {
       var person = people[i];

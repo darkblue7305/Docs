@@ -23,18 +23,18 @@ The default Razor language is HTML. Rendering HTML from Razor is no different th
 
   <p>Hello World</p> 
 
-Is rendered ``<p>Hello World</p>`` by the server.
+Is rendered unchanged as ``<p>Hello World</p>`` by the server.
 
 Rendering server code
 ----------------------
 
 Razor supports C# and uses the ``@`` symbol to transition from HTML to C#. 
-Razor can transition from HTML into C# or into Razor specific markup. When an ``@`` symbol is followed by a Razor [reserved keyword](TODO, LINK DOWN) it transitions into Razor specific markup, otherwise it transitions into plain C# . 
+Razor can transition from HTML into C# or into Razor specific markup. When an ``@`` symbol is followed by a :ref:`Razor reserved keyword <Razor-reserved-keywords-label>` it transitions into Razor specific markup, otherwise it transitions into plain C# . 
 
 Razor expressions
 ---------------------
 
-Implicit Razor expressions start with ``@`` followed by C# code. Explicit Razor expressions starts with ``@`` and are in a block enclosed by ``()`` or ``{}``. For example:
+Implicit Razor expressions start with ``@`` followed by C# code. Explicit Razor expressions start with ``@`` and are in a block enclosed by ``()`` or ``{}``. For example:
 
 .. literalinclude:: razor/sample/Views/Home/Contact.cshtml
   :language: html
@@ -59,7 +59,7 @@ Which is rendered by a browser as:
 .. image:: razor/_static/r1.png
   :scale: 100
 
-Explicit expressions generally cannot contain spaces. For example:
+Explicit expressions generally cannot contain spaces. For example, in the code below, one week is not subtracted from the current time:
 
 .. literalinclude:: razor/sample/Views/Home/Contact.cshtml
   :language: html
@@ -93,7 +93,9 @@ Which renders the following HTML:
 
 With the exception of the C# ``await`` keyword implicit expressions must not contain spaces. For example, you can intermingle spaces as long as the C# statement has a clear ending:
 
-<p>@await DoSomething("hello", "world")</p>
+.. code-block:: none
+
+  <p>@await DoSomething("hello", "world")</p>
 
 HTML containing ``@`` symbols may need to be escaped with a second ``@`` symbol. For example:
   
@@ -144,7 +146,7 @@ generates:
 
   <p>Age@joe.Age</p>
 
-Razor is treating ``Age@joe.Age`` as an email alias. In cases like this, create an explicit expression with ``()``:
+Razor is treating ``Age@joe.Age`` as an email alias. In cases like this, create an explicit expression with ``@()``:
 
 .. code-block:: none
 
@@ -183,6 +185,8 @@ Which the browser renders as:
 ``<div>Hello World</div>)`` 
 
 :dn:cls:`~Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper` :dn:method:`~Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper.Raw` wraps the HTML markup in an :dn:cls:`~Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper` instance so that it is not encoded but rendered as HTML markup. :dn:cls:`~Microsoft.AspNetCore.Mvc.ViewFeatures.HtmlHelper` implements :dn:iface:`~Microsoft.AspNetCore.Html.IHtmlContent`
+
+.. review note: The following was approved by blowdart/barry
 
 .. warning:: Using ``HtmlHelper.Raw`` on unsanitzed user input is a security risk. User input might contain malicious JavaScript or other exploits. Sanitizing user input is difficult, avoid using ``HtmlHelper.Raw`` on user input.
 
@@ -265,7 +269,7 @@ Consider the following Razor markup which renders a list of names:
       <p>Name: @person.Name</p>
   }
 
-The HTML tag ``<p> </p>`` provides a boundry for Razor to transition into C#. But suppose you wanted to render the names **without** HTML tags? The following code generates a Razor compilation error:
+HTML tags (``<p> </p>`` in the sample, but any HTML tags will do) provide a boundry for Razor to transition into C#. But suppose you wanted to render the names **without** HTML tags? The following code generates a Razor compilation error:
 
 .. code-block:: none
 
@@ -278,11 +282,12 @@ The HTML tag ``<p> </p>`` provides a boundry for Razor to transition into C#. Bu
 Use the ``@:`` characters to specify that Razor should transition from C# to text:
 
 .. code-block:: none
+  :emphasize-lines: 4
 
   @for (var i = 0; i < people.Length; i++)
   {
       var person = people[i];
-      Name: @person.Name
+      @:Name: @person.Name
   }
 
   
@@ -418,7 +423,7 @@ Compound using statements can be used to represent scoping. For instance, we can
       // Form content.
   }
 
-You can also perform scope level actions like the above with :doc:`/mvc/views/tag-helpers/index`
+You can also perform scope level actions like the above with :doc:`/mvc/views/tag-helpers/index`.
 
 
 ``@try``, ``catch``, ``finally`` 
@@ -426,20 +431,8 @@ You can also perform scope level actions like the above with :doc:`/mvc/views/ta
 
 Exception handling is similar to  C#:
 
-.. code-block:: none
-  
-  @try
-  {
-      throw new InvalidOperationException("You did something invalid.");
-  }
-  catch (Exception ex)
-  {
-      <p>The exception message: @ex.Message</p>
-  }
-  finally
-  {
-      // Do something
-  }
+.. literalinclude:: razor/sample/Views/Home/Contact7.cshtml
+  :language: html
 
 ``@lock``
 ^^^^^^^^^
@@ -490,17 +483,8 @@ Directives
 -----------
 Razor directives are represented by implicit expressions with reserved keywords following the ``@`` symbol. A directive will typically change the way a page is parsed or enable different functionality within your Razor page. A Razor page is just a generated C# file. A simple example of what a Razor page generates:
 
-.. code-block:: none
-
-  @{
-      Layout = null;
-  }
-  
-  @{
-      var output = "Hello World";
-  }
-  
-  <div>Output: @output</div>
+.. literalinclude:: razor/sample/Views/Home/Contact8.cshtml
+  :language: html
  
 The Razor markup above will generate a class similar to the following:
 
@@ -520,28 +504,26 @@ The Razor markup above will generate a class similar to the following:
       }
   }
    
-:ref:`Razor-CustomCompilationService-label` explains how to view this class. Understanding how Razor generates code for a view will make it easier to follow how directives work.
+:ref:`Razor-CustomCompilationService-label` explains how to view this generated class. Understanding how Razor generates code for a view will make it easier to understand how directives work.
    
 ``@using``
+^^^^^^^^^^^^^
+
 The ``@using`` directive will add the c# ``using`` directive to the generated razor page:
 
 .. review: You had @using System.Collections.Generic - but that's included in the Razor page.
 
-.. code-block:: none
-
-  @using  System.IO
-  @{ 
-      var dir = Directory.GetCurrentDirectory();
-  }
-  <p>@dir</p>
-   
-
+.. literalinclude:: razor/sample/Views/Home/Contact9.cshtml
+  :language: html
+  
 ``@model``
 ^^^^^^^^^^^^
 
 The ``@model`` directive allows you to specify the type of the model past to your Razor page. It uses the following syntax:
 
-``@model TypeNameOfModel``
+.. code-block:: none
+
+  @model TypeNameOfModel<TModel> 
 
 For example, if you create a new ASP.NET Core MVC app with individual user accounts, the *Views/Account/Login.cshtml* Razor view file contains the follow model declaration:
 
@@ -572,12 +554,18 @@ Obviously you must pass the model from your controller to the view. See :ref:`St
 ``@inherits``
 ^^^^^^^^^^^^^^^
 
-The ``@inherits`` directive is similar to the model directive. ``@inherits`` gives you full control of the class your Razor page inherits. Usage:
+The ``@inherits`` directive is similar to the model directive. ``@inherits`` gives you full control of the class your Razor page inherits:
 
 .. code-block:: none
 
  @inherits TypeNameOfClassToInheritFrom 
  
+.. review note: couldn't get non-generic to work. Test with http://localhost:24694/home/contact/11
+  public abstract class CustomRazorPage2 : RazorPage
+  {
+         public string CustomText { get; } = "CustomRazorPage2.";
+  }
+
 For instance, let’s say we had the following custom Razor page type:
 
 .. literalinclude:: razor/sample/Classes/CustomRazorPage.cs
@@ -585,28 +573,23 @@ For instance, let’s say we had the following custom Razor page type:
 
 The following Razor would generate ``<div>Custom text: Hello World</div>``.
 
-.. literalinclude:: razor/sample/Views/Home/Contact4.cshtml
+.. literalinclude:: razor/sample/Views/Home/Contact10.cshtml
   :language: html
- 
-The ``@inherits`` keyword is not allowed when ``@model`` is used. To combine the two, change the custom type to inherit from the generic Razor page:
 
-.. literalinclude:: razor/sample/Classes/CustomRazorPage2.cs
-  :language: c#
-  :lines: 5-8
-  :dedent: 4
-
-The following Razor page, when passed "Rick@Example.com" in the model:
+The ``@inherits`` keyword is not allowed when ``@model`` is used. You can pass a model as shown with the following Razor page (when passed "Rick@Example.com" in the model):
 
 .. literalinclude:: razor/sample/Views/Home/Login1.cshtml
   :language: html
-  :lines: 3-
+  :lines: 1-
   
-Generates this HTML markup:
+Generates this HTML:
 
 .. code-block:: none
 
   <div>The Login Email: Rick@Example.com</div>
-  <div>Custom text: Hello model and custom.</div>
+  <div>Custom text: Hello Hello World.</div>
+
+.. review: Adding the model to _ViewImports is not needed. We don't need it to pass a model.
 
 While you can't use ``@model`` and ``@inherits`` on the same page, you can have ``@model`` in a *_ViewImports.cshtml* file that the Razor page imports. See :doc:`/mvc/views/layout`. For example, if your Razor view imported the following *_ViewImports.cshtml* file:
 
@@ -666,7 +649,7 @@ The ``@functions`` directive enables you to add function level content to your R
 
 For example:
 
-.. literalinclude:: razor/sample/Views/Home/Contact5.cshtml
+.. literalinclude:: razor/sample/Views/Home/Contact6.cshtml
   :language: html
 
 Generates the following HTML markup:
@@ -737,6 +720,46 @@ The browser rendering of the above Razor markup:
   
 Razor reserved keywords
 ------------------------
+
+Razor keywords
+^^^^^^^^^^^^^^^
+
+- functions
+- inherits
+- model
+- section
+- helper   (Not supported by ASP.NET Core.)
+
+Razor keyworks can be escaped with ``@(Razor Keyword)``, for example ``@(functions)``. See the complete sample below.
+
+C# Razor keywords
+^^^^^^^^^^^^^^^^^^
+
+- case
+- do
+- default
+- for
+- foreach
+- if
+- lock
+- switch
+- try
+- using
+- while
+
+C# Razor keyworks need to be double escaped with ``@(@C# Razor Keyword)``, for example ``@(@case)``. The first ``@`` escapes the Razor parser, the second ``@`` escapes the C# parser. See the complete sample below.
+
+Reserved keywords not used by Razor
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- namespace
+- class
+- layout
+
+The following sample show all the Razor reserved words escaped:
+
+.. literalinclude:: razor/sample/Views/Home/Contact5.cshtml
+  :language: html
   
 .. _Razor-CustomCompilationService-label:
 
